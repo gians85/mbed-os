@@ -41,7 +41,7 @@ typedef enum {
 } ADCName;
 
 typedef enum {
-    UART_1 = (int)USART_BASE
+    UART_1 = (int)UART_BASE
 } UARTName;
 
 #define STDIO_UART_TX  PA_2
