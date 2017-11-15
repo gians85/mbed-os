@@ -32,6 +32,7 @@ MEMORY
  *   __stack
  *   _estack
  */
+
 ENTRY(Reset_Handler)
 
 SECTIONS
