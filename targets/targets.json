@@ -3509,5 +3509,26 @@
         "device_name": "TMPM066FWUG",
         "detect_code": ["7011"],
         "release_versions": ["5"]
+    },
+    "BLUENRG1": {
+	"inherits": ["Target"],
+	"core": "Cortex-M0",
+	"supported_toolchains": ["ARM", "GCC_ARM", "IAR"],
+	"device_has": ["BLUENRG1"]
+    },
+    "STEVAL_IDB007V1": {
+	"inherits": ["BLUENRG1"],
+	"device_has_add": ["PORTOUT"],
+        "extra_labels_add": [],
+        "release_versions": ["5"],
+        "device_name": "BLUENRG1",
+        "macros_add": ["CMSIS_VECTAB_VIRTUAL", "CMSIS_VECTAB_VIRTUAL_HEADER_FILE=\"cmsis_nvic.h\""],        
+        "config": {
+            "clock_source": {
+                "help": "Mask value : USE_PLL_HSE_EXTC | USE_PLL_HSE_XTAL (need HW patch) | USE_PLL_HSI",
+                "value": "USE_PLL_HSE_EXTC|USE_PLL_HSI",
+                "macro_name": "CLOCK_SOURCE"
+            }
+        }
     }
 }
