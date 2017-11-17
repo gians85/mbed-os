@@ -54,7 +54,7 @@ struct port_s {
     __IO uint32_t *reg_out;
 };
 
-#include "common_objects.h"
+//#include "common_objects.h"
 
 #ifdef __cplusplus
 }

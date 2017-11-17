@@ -100,6 +100,10 @@
        defined(TARGET_STM32F769NI))
 #define INITIAL_SP              (0x20080000UL)
 
+#elif (defined(TARGET_STEVAL_IDB007V1))
+#define INITIAL_SP				(0x20006000UL)
+
+
 #else
 #error "INITIAL_SP is not defined for this target in the mbed_rtx.h file"
 #endif

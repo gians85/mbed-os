@@ -51,7 +51,8 @@ typedef struct {
     __IO uint32_t *reg_set;
     __IO uint32_t *reg_clr;
     PinName  pin;
-    GPIO_TypeDef *gpio;
+    //GPIO_TypeDef *gpio;
+    GPIO_Type *gpio;
     uint32_t ll_pin;
 } gpio_t;
 

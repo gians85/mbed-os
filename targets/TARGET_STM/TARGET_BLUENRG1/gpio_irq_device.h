@@ -1,6 +1,6 @@
 /* mbed Microcontroller Library
  *******************************************************************************
- * Copyright (c) 2014, STMicroelectronics
+ * Copyright (c) 2017, STMicroelectronics
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,44 +27,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************
  */
-#ifndef MBED_PERIPHERALNAMES_H
-#define MBED_PERIPHERALNAMES_H
-
-#include "cmsis.h"
+#ifndef MBED_GPIO_IRQ_DEVICE_H
+#define MBED_GPIO_IRQ_DEVICE_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef enum {
-    ADC_1 = (int)ADC_BASE
-} ADCName;
+#include "BlueNRG1_gpio.h"
 
-typedef enum {
-    UART_1 = (int)UART_BASE
-} UARTName;
+// Number of EXTI irq vectors (EXTI0_1, EXTI2_3, EXTI4_15)
+#define CHANNEL_NUM (3)
 
-#define STDIO_UART_TX  PA_2
-#define STDIO_UART_RX  PA_3
-#define STDIO_UART     UART_2
+#define EXTI_IRQ0_NUM_LINES 2
+#define EXTI_IRQ1_NUM_LINES 2
+#define EXTI_IRQ2_NUM_LINES 12
+// Max pins for one line (max with EXTI4_15)
+#define MAX_PIN_LINE (EXTI_IRQ2_NUM_LINES)
 
-typedef enum {
-    SPI_1 = (int)SPI_BASE
-} SPIName;
+/*  Structure to describe how the HW EXTI lines are defined in this HW */
+typedef struct exti_lines {
+    uint32_t gpio_idx;   // an index entry for each EXIT line
+    uint32_t irq_index;  // the IRQ index
+    IRQn_Type  irq_n;    // the corresponding EXTI IRQn
+} exti_lines_t;
 
-typedef enum {
-    I2C_1 = (int)I2C1_BASE,
-    I2C_2 = (int)I2C2_BASE
-} I2CName;
-
-/*typedef enum {
-    PWM_1  = (int)TIM1_BASE,
-    PWM_3  = (int)TIM3_BASE,
-    PWM_14 = (int)TIM14_BASE,
-    PWM_15 = (int)TIM15_BASE,
-    PWM_16 = (int)TIM16_BASE,
-    PWM_17 = (int)TIM17_BASE
-} PWMName;*/
+// Used to return the index for channels array.
+extern const exti_lines_t pin_lines_desc[];
 
 #ifdef __cplusplus
 }

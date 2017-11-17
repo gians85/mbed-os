@@ -1,6 +1,6 @@
 /* mbed Microcontroller Library
  *******************************************************************************
- * Copyright (c) 2014, STMicroelectronics
+ * Copyright (c) 2016, STMicroelectronics
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,47 +27,43 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************
  */
-#ifndef MBED_PERIPHERALNAMES_H
-#define MBED_PERIPHERALNAMES_H
+#ifndef MBED_PIN_DEVICE_H
+#define MBED_PIN_DEVICE_H
 
 #include "cmsis.h"
+#include "BlueNRG1_gpio.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+extern const uint32_t ll_pin_defines[16];
 
-typedef enum {
-    ADC_1 = (int)ADC_BASE
-} ADCName;
-
-typedef enum {
-    UART_1 = (int)UART_BASE
-} UARTName;
-
-#define STDIO_UART_TX  PA_2
-#define STDIO_UART_RX  PA_3
-#define STDIO_UART     UART_2
-
-typedef enum {
-    SPI_1 = (int)SPI_BASE
-} SPIName;
-
-typedef enum {
-    I2C_1 = (int)I2C1_BASE,
-    I2C_2 = (int)I2C2_BASE
-} I2CName;
-
-/*typedef enum {
-    PWM_1  = (int)TIM1_BASE,
-    PWM_3  = (int)TIM3_BASE,
-    PWM_14 = (int)TIM14_BASE,
-    PWM_15 = (int)TIM15_BASE,
-    PWM_16 = (int)TIM16_BASE,
-    PWM_17 = (int)TIM17_BASE
-} PWMName;*/
-
-#ifdef __cplusplus
+/* Family specific implementations */
+static inline void stm_pin_DisconnectDebug(PinName pin)
+{
+    /* empty for now */
 }
-#endif
+
+static inline void stm_pin_PullConfig(GPIO_TypeDef *gpio, uint32_t ll_pin, uint32_t pull_config)
+{
+    switch (pull_config) {
+        case GPIO_PULLUP:
+            LL_GPIO_SetPinPull(gpio, ll_pin, LL_GPIO_PULL_UP);
+            break;
+        case GPIO_PULLDOWN:
+            LL_GPIO_SetPinPull(gpio, ll_pin, LL_GPIO_PULL_DOWN);
+            break;
+        default:
+            LL_GPIO_SetPinPull(gpio, ll_pin, LL_GPIO_PULL_NO);
+            break;
+    }
+}
+
+static inline void stm_pin_SetAFPin( GPIO_TypeDef *gpio, PinName pin, uint32_t afnum)
+{
+    uint32_t ll_pin  = ll_pin_defines[STM_PIN(pin)];
+
+    if (STM_PIN(pin) > 7)
+        LL_GPIO_SetAFPin_8_15(gpio, ll_pin, afnum);
+    else
+        LL_GPIO_SetAFPin_0_7(gpio, ll_pin, afnum);
+}
 
 #endif

@@ -138,7 +138,15 @@ extern void __iar_program_start(void);
   *         Usage:  PACKED(struct) myStruct_s
   *                 PACKED(union) myStruct_s
   */
+/**
+  * [ERROR] ./mbed-os/platform/mbed_toolchain.h:380:0: note: this is the location of the previous definition
+  *         #define PACKED MBED_PACKED()
+  * [mysolution]
+  *         ADD #ifndef  to pre-existent #define PACKED(decl)
+  */
+#ifndef PACKED
 #define PACKED(decl)                    decl __attribute__((packed))
+#endif
 
 /**
   * @brief  REQUIRED
@@ -146,6 +154,8 @@ extern void __iar_program_start(void);
   *         Usage:  REQUIRED(static uint8_t my_array[16])
   *                 REQUIRED(static int my_int)
   */
+
+
 #define REQUIRED(var)                   var __attribute__((used))
 
 /**

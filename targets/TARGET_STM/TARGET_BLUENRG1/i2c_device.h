@@ -1,6 +1,6 @@
 /* mbed Microcontroller Library
  *******************************************************************************
- * Copyright (c) 2014, STMicroelectronics
+ * Copyright (c) 2015, STMicroelectronics
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,8 +27,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************
  */
-#ifndef MBED_PERIPHERALNAMES_H
-#define MBED_PERIPHERALNAMES_H
+#ifndef MBED_I2C_DEVICE_H
+#define MBED_I2C_DEVICE_H
 
 #include "cmsis.h"
 
@@ -36,38 +36,51 @@
 extern "C" {
 #endif
 
-typedef enum {
-    ADC_1 = (int)ADC_BASE
-} ADCName;
+#ifdef DEVICE_I2C
 
-typedef enum {
-    UART_1 = (int)UART_BASE
-} UARTName;
-
-#define STDIO_UART_TX  PA_2
-#define STDIO_UART_RX  PA_3
-#define STDIO_UART     UART_2
-
-typedef enum {
-    SPI_1 = (int)SPI_BASE
-} SPIName;
-
-typedef enum {
-    I2C_1 = (int)I2C1_BASE,
-    I2C_2 = (int)I2C2_BASE
-} I2CName;
-
-/*typedef enum {
-    PWM_1  = (int)TIM1_BASE,
-    PWM_3  = (int)TIM3_BASE,
-    PWM_14 = (int)TIM14_BASE,
-    PWM_15 = (int)TIM15_BASE,
-    PWM_16 = (int)TIM16_BASE,
-    PWM_17 = (int)TIM17_BASE
-} PWMName;*/
-
-#ifdef __cplusplus
-}
+#if defined I2C1_BASE
+#define I2C1_EV_IRQn I2C1_IRQn
+#define I2C1_ER_IRQn I2C1_IRQn
 #endif
+#if defined I2C2_BASE
+#define I2C2_EV_IRQn I2C2_IRQn
+#define I2C2_ER_IRQn I2C2_IRQn
+#endif
+#if defined I2C3_BASE
+#define I2C3_EV_IRQn I2C3_IRQn
+#define I2C3_ER_IRQn I2C3_IRQn
+#endif
+
+#define I2C_IT_ALL (I2C_IT_ERRI|I2C_IT_TCI|I2C_IT_STOPI|I2C_IT_NACKI|I2C_IT_ADDRI|I2C_IT_RXI|I2C_IT_TXI)
+
+
+/*  Define IP version */
+#define I2C_IP_VERSION_V2
+
+/*  Family specifc settings for clock source */
+#define I2CAPI_I2C1_CLKSRC RCC_I2C1CLKSOURCE_SYSCLK
+
+/*  Provide the suitable timing depending on requested frequencie */
+static inline uint32_t get_i2c_timing(int hz)
+{
+    uint32_t tim = 0;
+
+    switch (hz) {
+        case 100000:
+            tim = 0x10805E89; // Standard mode with Rise Time = 400ns and Fall Time = 100ns
+            break;
+        case 400000:
+            tim = 0x00901850; // Fast mode with Rise Time = 250ns and Fall Time = 100ns
+            break;
+        case 1000000:
+            tim = 0x00700818; // Fast mode Plus with Rise Time = 60ns and Fall Time = 100ns
+            break;
+        default:
+            break;
+    }
+    return tim;
+}
+
+#endif // DEVICE_I2C
 
 #endif

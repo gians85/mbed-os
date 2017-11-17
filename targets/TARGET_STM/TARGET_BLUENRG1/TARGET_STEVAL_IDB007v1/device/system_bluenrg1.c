@@ -14,8 +14,8 @@
 *******************************************************************************/
 
 #include "BlueNRG_x_device.h"
-#include "BluenRG1_flash.h"
-#include "misc.h"
+#include "..\..\device\BluenRG1_flash.h"
+#include "..\..\device\misc.h"
 #include "hal_types.h"
 #include "compiler.h"
 
