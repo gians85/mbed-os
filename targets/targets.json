@@ -3525,6 +3525,13 @@
         "core": "Cortex-M0",
         "extra_labels_add": ["BLUENRG1"],
         "release_versions": ["5"],
+        "config": {
+            "clock_source": {
+                "help": "Mask value : USE_PLL_HSE_EXTC | USE_PLL_HSE_XTAL (need HW patch) | USE_PLL_HSI",
+                "value": "USE_PLL_HSE_EXTC|USE_PLL_HSI",
+                "macro_name": "CLOCK_SOURCE"
+            }
+        },
         "device_name": "BLUENRG1"
     }
 }

@@ -1,7 +1,8 @@
+// The 'features' section in 'target.json' is now used to create the device's hardware preprocessor switches.
+// Check the 'features' section of the target description in 'targets.json' for more details.
 /* mbed Microcontroller Library
- * A generic CMSIS include header
  *******************************************************************************
- * Copyright (c) 2015, STMicroelectronics
+ * Copyright (c) 2014, STMicroelectronics
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,11 +29,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************
  */
+#ifndef MBED_DEVICE_H
+#define MBED_DEVICE_H
 
-#ifndef MBED_CMSIS_H
-#define MBED_CMSIS_H
+//=======================================
+#define DEVICE_ID_LENGTH       24
 
-//#include "stm32f0xx.h"
-//#include "cmsis_nvic.h"
+#include "objects.h"
 
 #endif

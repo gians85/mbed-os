@@ -1,7 +1,6 @@
 /* mbed Microcontroller Library
- * A generic CMSIS include header
  *******************************************************************************
- * Copyright (c) 2015, STMicroelectronics
+ * Copyright (c) 2014, STMicroelectronics
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,11 +27,43 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************
  */
+#ifndef MBED_PERIPHERALNAMES_H
+#define MBED_PERIPHERALNAMES_H
+/*
+#include "cmsis.h"
 
-#ifndef MBED_CMSIS_H
-#define MBED_CMSIS_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-//#include "stm32f0xx.h"
-//#include "cmsis_nvic.h"
+typedef enum {
+    ADC_1 = (int)ADC1_BASE
+} ADCName;
 
+typedef enum {
+    UART_1 = (int)USART1_BASE
+} UARTName;
+
+#define STDIO_UART_TX  PA_2
+#define STDIO_UART_RX  PA_3
+#define STDIO_UART     UART_2
+
+typedef enum {
+    SPI_1 = (int)SPI1_BASE
+} SPIName;
+
+typedef enum {
+    I2C_1 = (int)I2C1_BASE,
+    I2C_2 = (int)I2C2_BASE
+} I2CName;
+
+typedef enum {
+    MFT_1  = (int)MFT1_BASE,
+    MFT_2  = (int)MFT2_BASE
+} MFTName;
+
+#ifdef __cplusplus
+}
+#endif
+*/
 #endif
