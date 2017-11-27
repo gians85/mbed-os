@@ -3515,7 +3515,7 @@
         "inherits": ["Target"],
         "core": "Cortex-M0",
         "supported_toolchains": ["ARM", "IAR", "GCC_ARM"],
-        "device_has": [],
+        "device_has": ["PORTOUT"],
         "public": false,
         "extra_labels": ["STM"]      
     },
