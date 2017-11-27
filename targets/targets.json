@@ -3520,5 +3520,28 @@
         "device_name": "TMPM066FWUG",
         "detect_code": ["7011"],
         "release_versions": ["5"]
+    },
+    "BLUENRG1": {
+        "inherits": ["Target"],
+        "core": "Cortex-M0",
+        "supported_toolchains": ["ARM", "IAR", "GCC_ARM"],
+        "device_has": ["PORTOUT"],
+        "public": false,
+        "extra_labels": ["STMBLUE"]      
+    },
+    "STEVAL_IDB007V1": {
+        "inherits": ["BLUENRG1"],
+        "macros_add": [],
+        "core": "Cortex-M0",
+        "extra_labels_add": ["BLUENRG1"],
+        "release_versions": ["5"],
+        "config": {
+            "clock_source": {
+                "help": "Mask value : USE_PLL_HSE_EXTC | USE_PLL_HSE_XTAL (need HW patch) | USE_PLL_HSI",
+                "value": "USE_PLL_HSE_EXTC|USE_PLL_HSI",
+                "macro_name": "CLOCK_SOURCE"
+            }
+        },
+        "device_name": "BLUENRG1"
     }
 }
