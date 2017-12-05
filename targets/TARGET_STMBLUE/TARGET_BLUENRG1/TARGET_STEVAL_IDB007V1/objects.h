@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-
+#ifdef stm
 typedef struct {
     uint32_t mask;
     __IO uint32_t *reg_in;
@@ -23,9 +23,10 @@ typedef struct {
     GPIO_TypeDef *gpio;
     uint32_t ll_pin;
 } gpio_t;
+#endif
 
 
-// #define gpio_t GPIO_InitType
+#define gpio_t GPIO_InitType
 
 struct gpio_irq_s {
     IRQn_Type irq_n;

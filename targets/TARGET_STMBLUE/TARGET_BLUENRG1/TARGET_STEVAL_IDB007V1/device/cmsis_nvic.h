@@ -14,14 +14,17 @@
 #define NVIC_USER_IRQ_OFFSET  16
 
 #include "cmsis.h"
-#include "misc.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#define NVIC_RAM_VECTOR_ADDRESS		_MEMORY_RAM_BEGIN_		// Vectors positioned at start of RAM
+#define NVIC_FLASH_VECTOR_ADDRESS	_MEMORY_FLASH_BEGIN_	// Initial vector position in flash
+
 //void NVIC_SetVector(IRQn_Type IRQn, uint32_t vector);
 //uint32_t NVIC_GetVector(IRQn_Type IRQn);
+#include "misc.h"
 
 #ifdef __cplusplus
 }

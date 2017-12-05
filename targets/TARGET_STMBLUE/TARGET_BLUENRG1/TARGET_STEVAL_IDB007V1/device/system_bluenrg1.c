@@ -33,6 +33,7 @@
 
 #define BLUE_FLAG_TAG   (0x424C5545)
 
+#ifdef ccc
 WEAK_FUNCTION(void NMI_Handler(void) {});
 WEAK_FUNCTION(void HardFault_Handler(void) {});
 WEAK_FUNCTION(void SVC_Handler(void) {});
@@ -56,7 +57,7 @@ WEAK_FUNCTION(void I2C2_Handler(void) {});
 WEAK_FUNCTION(void I2C1_Handler(void) {});
 WEAK_FUNCTION(void DMA_Handler(void) {});
 WEAK_FUNCTION(void PKA_Handler(void) {});
-
+#endif
 
 
 //------------------------------------------------------------------------------

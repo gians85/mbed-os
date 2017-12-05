@@ -3527,25 +3527,13 @@
         "supported_toolchains": ["ARM", "IAR", "GCC_ARM"],
         "public": false,
         "extra_labels": ["STMBLUE"],
-        "macros_NO": ["TRANSACTION_QUEUE_SIZE_SPI=2"],
         "device_has": ["SERIAL", "STDIO_MESSAGES"]
-          
     },
     "STEVAL_IDB007V1": {
         "inherits": ["BLUENRG1"],
         "core": "Cortex-M0",
         "extra_labels_add": ["BLUENRG1"],
         "release_versions": ["5"],
-        "device_name": "BLUENRG1",
-        "config": {
-            "clock_source": {
-                "help": "Mask value : USE_PLL_HSE_EXTC | USE_PLL_HSE_XTAL (need HW patch) | USE_PLL_HSI",
-                "value": "USE_PLL_HSE_EXTC|USE_PLL_HSI",
-                "macro_name": "CLOCK_SOURCE_undef"
-            }
-        },
-        "detect_code": ["9999"],
-        "macros_add": ["CMSIS_VECTAB_VIRTUAL_undef", "CMSIS_VECTAB_VIRTUAL_HEADER_FILE=\"cmsis_nvic.h\""],
-        "device_has_add": ["LOWPOWERTIMER_undef", "SERIAL_FC_undef", "SERIAL_ASYNCH_undef"]
+        "device_name": "BLUENRG1"
     }
 }
