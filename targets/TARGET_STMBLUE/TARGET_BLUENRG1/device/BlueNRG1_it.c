@@ -27,7 +27,6 @@
 //#include "SDK_EVAL_Config.h"
 #include "cmsis.h"
 #include "clock.h"
-#include "rtx_os.h"
 
 /** @addtogroup BlueNRG1_StdPeriph_Examples
 * @{

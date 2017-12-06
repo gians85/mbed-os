@@ -91,14 +91,21 @@ void gpio_init(gpio_t *obj, PinName pin) {
     obj->reg_clr = &gpio->BRR;
 #endif*/
 
+	/* Enable the GPIO Clock */
+	SysCtrl_PeripheralClockCmd(CLOCK_PERIPH_GPIO, ENABLE);
 	// get pin mask
 	obj->GPIO_Pin = getGpioPin(pin);
 	// preset
 	obj->GPIO_Mode = GPIO_Output;
 	obj->GPIO_Pull = ENABLE;
-	obj->GPIO_HighPwr = DISABLE;
+	obj->GPIO_HighPwr = ENABLE;
 	// init
 	GPIO_Init(obj);
+	GPIO_WriteBit(getGpioPin(pin), LED_OFF);
+}
+
+int gpio_read(gpio_t *obj){
+	return GPIO_ReadBit(obj->GPIO_Pin);
 }
 
 

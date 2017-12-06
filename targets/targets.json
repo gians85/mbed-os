@@ -3526,8 +3526,7 @@
         "core": "Cortex-M0",
         "supported_toolchains": ["ARM", "IAR", "GCC_ARM"],
         "public": false,
-        "extra_labels": ["STMBLUE"],
-        "device_has": ["SERIAL", "STDIO_MESSAGES"]
+        "extra_labels": ["STMBLUE"]
     },
     "STEVAL_IDB007V1": {
         "inherits": ["BLUENRG1"],
