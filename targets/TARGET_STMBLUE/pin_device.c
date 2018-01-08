@@ -10,7 +10,8 @@
 
 
 uint32_t getGpioPin(PinName pin){
-	uint32_t mask;
+	return (uint32_t)(1 << ((uint32_t)pin & 0xF)); // Return the pin mask
+	/*uint32_t mask;
 	switch (pin)
 	{
 		case(IO_0):
@@ -65,5 +66,7 @@ uint32_t getGpioPin(PinName pin){
 			mask = GPIO_Pin_14;  //LED3
 			break;
 	}
-	return (mask);
+	return (mask);*/
 }
+
+

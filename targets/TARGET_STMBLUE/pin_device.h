@@ -19,5 +19,4 @@
 uint32_t getGpioPin(PinName);
 
 
-
 #endif /* MBED_OS_TARGETS_TARGET_STMBLUE_PIN_DEVICE_H_ */

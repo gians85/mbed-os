@@ -8,12 +8,26 @@
 #include "PeripheralNames.h"
 #include "PinNames.h"
 #include "pin_device.h"
+#include "BlueNRG1_uart.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#define gpio_t GPIO_InitType
+
+struct serial_s{
+    UARTName uart;
+    int index; // Used by irq
+    UART_InitType init;
+    PinName pin_tx;
+    PinName pin_rx;
+};
+
+
 #ifdef stm
+
+
 typedef struct {
     uint32_t mask;
     __IO uint32_t *reg_in;
@@ -23,28 +37,6 @@ typedef struct {
     GPIO_TypeDef *gpio;
     uint32_t ll_pin;
 } gpio_t;
-#endif
-
-
-#define gpio_t GPIO_InitType
-
-struct gpio_irq_s {
-    IRQn_Type irq_n;
-    uint32_t irq_index;
-    uint32_t event;
-    PinName pin;
-};
-
-
-
-struct port_s {
-    PortName port;
-    uint32_t mask;
-    PinDirection direction;
-    __IO uint32_t *reg_in;
-    __IO uint32_t *reg_out;
-};
-
 
 struct serial_s {
     UARTName uart;
@@ -65,40 +57,60 @@ struct serial_s {
 #endif
 };
 
-//struct i2c_s {
-//    /*  The 1st 2 members I2CName i2c
-//     *  and I2C_HandleTypeDef handle should
-//     *  be kept as the first members of this struct
-//     *  to ensure i2c_get_obj to work as expected
-//     */
-//    I2CName  i2c;
-//    I2C_HandleTypeDef handle;
-//    uint8_t index;
-//    int hz;
-//    PinName sda;
-//    PinName scl;
-//    IRQn_Type event_i2cIRQ;
-//    IRQn_Type error_i2cIRQ;
-//    uint32_t XferOperation;
-//    volatile uint8_t event;
-//    volatile int pending_start;
-//#if DEVICE_I2CSLAVE
-//    uint8_t slave;
-//    volatile uint8_t pending_slave_tx_master_rx;
-//    volatile uint8_t pending_slave_rx_maxter_tx;
-//#endif
-//#if DEVICE_I2C_ASYNCH
-//    uint32_t address;
-//    uint8_t stop;
-//    uint8_t available_events;
-//#endif
-//};
 
-//struct analogin_s {
-//    ADC_HandleTypeDef handle;
-//    PinName pin;
-//    uint8_t channel;
-//};
+struct gpio_irq_s {
+    IRQn_Type irq_n;
+    uint32_t irq_index;
+    uint32_t event;
+    PinName pin;
+};
+
+
+struct port_s {
+    PortName port;
+    uint32_t mask;
+    PinDirection direction;
+    __IO uint32_t *reg_in;
+    __IO uint32_t *reg_out;
+};
+
+
+struct i2c_s {
+    /*  The 1st 2 members I2CName i2c
+     *  and I2C_HandleTypeDef handle should
+     *  be kept as the first members of this struct
+     *  to ensure i2c_get_obj to work as expected
+     */
+    I2CName  i2c;
+    I2C_HandleTypeDef handle;
+    uint8_t index;
+    int hz;
+    PinName sda;
+    PinName scl;
+    IRQn_Type event_i2cIRQ;
+    IRQn_Type error_i2cIRQ;
+    uint32_t XferOperation;
+    volatile uint8_t event;
+    volatile int pending_start;
+#if DEVICE_I2CSLAVE
+    uint8_t slave;
+    volatile uint8_t pending_slave_tx_master_rx;
+    volatile uint8_t pending_slave_rx_maxter_tx;
+#endif
+#if DEVICE_I2C_ASYNCH
+    uint32_t address;
+    uint8_t stop;
+    uint8_t available_events;
+#endif
+};
+
+
+struct analogin_s {
+    ADC_HandleTypeDef handle;
+    PinName pin;
+    uint8_t channel;
+};
+
 
 #if DEVICE_ANALOGOUT
 struct dac_s {
@@ -108,6 +120,13 @@ struct dac_s {
     DAC_HandleTypeDef handle;
 };
 #endif
+
+
+#endif
+
+
+
+
 
 
 #ifdef __cplusplus

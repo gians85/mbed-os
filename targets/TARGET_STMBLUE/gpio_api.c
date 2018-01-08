@@ -57,40 +57,21 @@ inline void gpio_write(gpio_t *obj, int value)
     	GPIO_WriteBit(obj->GPIO_Pin, 0);
 }
 
-/*
-static inline int gpio_read(gpio_t *obj)
-{
-    return ((*obj->reg_in & obj->mask) ? 1 : 0);
-}
 
-static inline int gpio_is_connected(const gpio_t *obj)
-{
-    return obj->pin != (PinName)NC;
+uint32_t gpio_set(PinName pin) {
+	MBED_ASSERT(pin != (PinName)NC);
+	/* pin_function(): pinmap.h:ARM */
+	//void pin_function(PinName pin, int function);
+	//pin_function(pin, STM_PIN_DATA(STM_MODE_INPUT, GPIO_NOPULL, 0));
+	//return (uint32_t)(1 << ((uint32_t)pin & 0xF)); // Return the pin mask
+	int data = GPIO_Input | 0x0000;
+	pin_function(pin, data);
+	return getGpioPin(pin);
 }
-*/
 
 
 
 void gpio_init(gpio_t *obj, PinName pin) {
-    /*obj->pin = pin;
-    if (pin == (PinName)NC) {
-        return;
-    }
-    uint32_t port_index = STM_PORT(pin);
-    // Enable GPIO clock
-    GPIO_TypeDef *gpio = Set_GPIO_Clock(port_index);
-    // Fill GPIO object structure for future use
-    obj->mask    = gpio_set(pin);
-    obj->gpio  = gpio;
-    obj->ll_pin  = ll_pin_defines[STM_PIN(obj->pin)];
-    obj->reg_in  = &gpio->IDR;
-    obj->reg_set = &gpio->BSRR;
-#ifdef GPIO_IP_WITHOUT_BRR
-    obj->reg_clr = &gpio->BSRR;
-#else
-    obj->reg_clr = &gpio->BRR;
-#endif*/
-
 	/* Enable the GPIO Clock */
 	SysCtrl_PeripheralClockCmd(CLOCK_PERIPH_GPIO, ENABLE);
 	// get pin mask
