@@ -64,7 +64,7 @@ uint32_t gpio_set(PinName pin) {
 	//void pin_function(PinName pin, int function);
 	//pin_function(pin, STM_PIN_DATA(STM_MODE_INPUT, GPIO_NOPULL, 0));
 	//return (uint32_t)(1 << ((uint32_t)pin & 0xF)); // Return the pin mask
-	int data = GPIO_Input | 0x0000;
+	int data = (int)GPIO_Input;
 	pin_function(pin, data);
 	return getGpioPin(pin);
 }

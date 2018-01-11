@@ -3524,13 +3524,12 @@
     "BLUENRG1": {
         "inherits": ["Target"],
         "core": "Cortex-M0",
-        "supported_toolchains": ["ARM", "IAR", "GCC_ARM"],
+        "supported_toolchains": ["ARM", "GCC_ARM", "IAR"],
         "public": false,
         "extra_labels": ["STMBLUE"]
     },
     "STEVAL_IDB007V1": {
         "inherits": ["BLUENRG1"],
-        "core": "Cortex-M0",
         "extra_labels_add": ["BLUENRG1"],
         "release_versions": ["5"],
         "device_name": "BLUENRG1"

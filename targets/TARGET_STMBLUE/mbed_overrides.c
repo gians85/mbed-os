@@ -25,14 +25,4 @@ void mbed_sdk_init()
 	    SystemCoreClockUpdate();
 #endif
 
-	// Before this mbed_sdk_init() is called SystemInit():
-	//   Remap the vector table
-	//   Configure all the interrupts priority.
-	//   Device Configuration
-	//   Disable all the peripherals clock except NVM, SYSCTR, PKA and RNG
-	//   enable irq
-
-	//The HAL_SYSTICK_Config()function calls the SysTick_Config() function
-	/* Configure SysTick to generate interrupt */
-	SysTick_Config(SYST_CLOCK/1000 - 1);
 }

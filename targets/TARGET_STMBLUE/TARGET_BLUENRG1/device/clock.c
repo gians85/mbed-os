@@ -60,7 +60,7 @@ void SysCount_Handler(void)
 void Clock_Init(void)
 {
   /** Configure SysTick to generate Interrupt with 1ms period */
-  SysTick_Config(SYSCLK_FREQ/1000 - 1);  
+  SysTick_Config(SYSCLK_FREQ/1000 - 1);
 }
 
 /*---------------------------------------------------------------------------*/

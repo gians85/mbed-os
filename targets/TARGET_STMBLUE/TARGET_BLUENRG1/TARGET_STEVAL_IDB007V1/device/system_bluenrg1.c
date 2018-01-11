@@ -57,7 +57,6 @@ WEAK_FUNCTION(void I2C2_Handler(void) {});
 WEAK_FUNCTION(void I2C1_Handler(void) {});
 WEAK_FUNCTION(void DMA_Handler(void) {});
 WEAK_FUNCTION(void PKA_Handler(void) {});
-#endif
 
 
 //------------------------------------------------------------------------------
@@ -158,7 +157,6 @@ int __low_level_init(void)
   return 1;
 }
 
-#ifdef sdk
 
 #ifdef __CC_ARM
 
@@ -294,7 +292,9 @@ REQUIRED(uint32_t *app_base) = (uint32_t *) __vector_table;
 
 SECTION(".bss.__blue_RAM")
 REQUIRED(static uint8_t __blue_RAM[8*64+12]) = {0,};
-#endif
+#endif //ccc
+
+
 /**
  * @name Device Configuration Registers
  *@{
@@ -566,8 +566,8 @@ void SystemInit(void)
 
   /* Configure all the interrupts priority. 
   * The application can modify the interrupts priority.
-  * The  PendSV_IRQn and BLUE_CTRL_IRQn SHALL maintain the highest priority
-  */
+  * The  PendSV_IRQn and BLUE_CTRL_IRQn SHALL maintain the highest priority */
+
   NVIC_SetPriority(PendSV_IRQn,    LOW_PRIORITY);
   NVIC_SetPriority(SysTick_IRQn,   LOW_PRIORITY);
   NVIC_SetPriority(GPIO_IRQn,      LOW_PRIORITY);
@@ -591,7 +591,10 @@ void SystemInit(void)
   DeviceConfiguration(TRUE, TRUE);
   /* Disable all the peripherals clock except NVM, SYSCTR, PKA and RNG */
   CKGEN_SOC->CLOCK_EN = 0xE0066;
+  /* Disable all the peripherals clock except NVM, SYSCTR*/
+  //CKGEN_SOC->CLOCK_EN = 0x00006;
   __enable_irq();
+  //__disable_irq();
 }
 
 
