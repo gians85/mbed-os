@@ -1,17 +1,17 @@
 /******************** (C) COPYRIGHT 2015 STMicroelectronics ********************
-* File Name          : system_bluenrg1.h
-* Author             : AMS - VMA
-* Version            : V1.0.0
-* Date               : 19-May-2015
-* Description        : BlueNRG Low Level Init function
-********************************************************************************
-* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
-* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
-* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
-* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
-* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
-*******************************************************************************/
+ * File Name          : system_bluenrg1.h
+ * Author             : AMS - VMA
+ * Version            : V1.0.0
+ * Date               : 19-May-2015
+ * Description        : BlueNRG Low Level Init function
+ ********************************************************************************
+ * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+ * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+ * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+ * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+ * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+ * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+ *******************************************************************************/
 
 #include "BlueNRG_x_device.h"
 #include "BluenRG1_flash.h"
@@ -97,7 +97,7 @@ REQUIRED(uint32_t savedMSP);
 //------------------------------------------------------------------------------
 SECTION(".wakeupFromSleepFlag")
 REQUIRED(uint8_t wakeupFromSleepFlag);
-  
+
 
 //------------------------------------------------------------------------------
 //   uint32_t __blueflag_RAM
@@ -141,20 +141,20 @@ uint32_t savedNVIC_ISPR;
 
 int __low_level_init(void) 
 {
-  // If the reset reason is a wakeup from sleep restore the context
-  if ((CKGEN_SOC->REASON_RST == 0) && (CKGEN_BLE->REASON_RST > RESET_WAKE_DEEPSLEEP_REASONS)) {
+	// If the reset reason is a wakeup from sleep restore the context
+	if ((CKGEN_SOC->REASON_RST == 0) && (CKGEN_BLE->REASON_RST > RESET_WAKE_DEEPSLEEP_REASONS)) {
 #ifndef NO_SMART_POWER_MANAGEMENT
-          
-  void CS_contextRestore(void);
-  wakeupFromSleepFlag = 1; //A wakeup from Standby or Sleep occurred
-  CS_contextRestore(); // Restore the context
-  //if the context restore worked properly, we should never return here
-  while(1) { ; }
+
+		void CS_contextRestore(void);
+		wakeupFromSleepFlag = 1; //A wakeup from Standby or Sleep occurred
+		CS_contextRestore(); // Restore the context
+		//if the context restore worked properly, we should never return here
+		while(1) { ; }
 #else
-  return 0;
+		return 0;
 #endif   
-  }
-  return 1;
+	}
+	return 1;
 }
 
 
@@ -162,12 +162,12 @@ int __low_level_init(void)
 
 void RESET_HANDLER(void)
 {
-  if(__low_level_init()==1)
-    __main();
-  else {
-    __set_MSP((uint32_t)_INITIAL_SP);
-    main();
-  }
+	if(__low_level_init()==1)
+		__main();
+	else {
+		__set_MSP((uint32_t)_INITIAL_SP);
+		main();
+	}
 }
 
 
@@ -189,36 +189,36 @@ extern int main(void);
 
 void RESET_HANDLER(void)
 {
-  if(__low_level_init()==1)	{
-    unsigned long *pulSrc, *pulDest;
-    
-    // Copy the data segment initializers from flash to SRAM.
-    pulSrc = &_sidata;
-    for(pulDest = &_sdata; pulDest < &_edata; )
-    {
-      *(pulDest++) = *(pulSrc++);
-    }
-    
-    pulSrc = &_sidata2;
-    for(pulDest = &_sdata2; pulDest < &_edata2; )
-    {
-      if (pulDest < (unsigned long *) 0x20000004) {
-    	  pulDest++;
-    	  pulSrc++;
-      } else {
-    	  *(pulDest++) = *(pulSrc++);
-      }
-    }
+	if(__low_level_init()==1)	{
+		unsigned long *pulSrc, *pulDest;
 
-    // Zero fill the bss segment.
-    for(pulDest = &_sbss; pulDest < &_ebss; )
-    {
-      *(pulDest++) = 0;
-    }
-  }
-  // Call the application's entry point.
-  __set_MSP((uint32_t)_INITIAL_SP);
-  main();
+		// Copy the data segment initializers from flash to SRAM.
+		pulSrc = &_sidata;
+		for(pulDest = &_sdata; pulDest < &_edata; )
+		{
+			*(pulDest++) = *(pulSrc++);
+		}
+
+		pulSrc = &_sidata2;
+		for(pulDest = &_sdata2; pulDest < &_edata2; )
+		{
+			if (pulDest < (unsigned long *) 0x20000004) {
+				pulDest++;
+				pulSrc++;
+			} else {
+				*(pulDest++) = *(pulSrc++);
+			}
+		}
+
+		// Zero fill the bss segment.
+		for(pulDest = &_sbss; pulDest < &_ebss; )
+		{
+			*(pulDest++) = 0;
+		}
+	}
+	// Call the application's entry point.
+	__set_MSP((uint32_t)_INITIAL_SP);
+	main();
 }
 
 #endif /* __GNUC__ */
@@ -227,57 +227,57 @@ void RESET_HANDLER(void)
 
 SECTION(".intvec")
 REQUIRED(const intvec_elem __vector_table[]) = {
-    _INITIAL_SP,                            /* Stack address                      */
-    RESET_HANDLER,           		    /* Reset handler is C initialization. */
-    NMI_Handler,                            /* The NMI handler                    */ 
-    HardFault_Handler,                      /* The hard fault handler             */ 
-    (intfunc) OTA_VALID_APP_TAG,            /* OTA Application                    */
-    (intfunc) BLUE_FLAG_TAG,                /* Reserved for blue flag DTM updater */ 
-    0x00000000,                             /* Reserved                           */ 
-    0x00000000,                             /* Reserved                           */ 
-    0x00000000,                             /* Reserved                           */ 
-    0x00000000,                             /* Reserved                           */ 
-    0x00000000,                             /* Reserved                           */ 
-    SVC_Handler,                            /* SVCall                             */ 
-    0x00000000,                             /* Reserved                           */ 
-    0x00000000,                             /* Reserved                           */ 
-    PendSV_Handler,                         /* PendSV                             */ 
-    SysTick_Handler,                        /* SysTick_Handler                    */ 
-    GPIO_Handler,                           /* IRQ0:  GPIO                        */ 
-    NVM_Handler,                            /* IRQ1:  NVM                         */ 
-    0x00000000,                             /* IRQ2:                              */ 
-    0x00000000,                             /* IRQ3:                              */ 
-    UART_Handler,                           /* IRQ4:  UART                        */ 
-    SPI_Handler,                            /* IRQ5:  SPI                         */ 
-    Blue_Handler,                           /* IRQ6:  Blue                        */ 
-    WDG_Handler,                            /* IRQ7:  Watchdog                    */ 
-    0x00000000,                             /* IRQ8:                              */ 
-    0x00000000,                             /* IRQ9:                              */ 
-    0x00000000,                             /* IRQ10:                             */ 
-    0x00000000,                             /* IRQ11:                             */ 
-    0x00000000,                             /* IRQ12:                             */ 
-    ADC_Handler,                            /* IRQ13  ADC                         */ 
-    I2C2_Handler,                           /* IRQ14  I2C2                        */ 
-    I2C1_Handler,                           /* IRQ15  I2C1                        */ 
-    0x00000000,                             /* IRQ16                              */ 
-    MFT1A_Handler,                          /* IRQ17  MFT1 irq1                   */ 
-    MFT1B_Handler,                          /* IRQ18  MFT1 irq2                   */ 
-    MFT2A_Handler,                          /* IRQ19  MFT2 irq1                   */ 
-    MFT2B_Handler,                          /* IRQ20  MFT2 irq2                   */ 
-    RTC_Handler,                            /* IRQ21  RTC                         */ 
-    PKA_Handler,                            /* IRQ22  PKA                         */ 
-    DMA_Handler,                            /* IRQ23  DMA                         */ 
-    0x00000000,                             /* IRQ24                              */ 
-    0x00000000,                             /* IRQ25                              */ 
-    0x00000000,                             /* IRQ26                              */ 
-    0x00000000,                             /* IRQ27                              */ 
-    0x00000000,                             /* IRQ28                              */ 
-    0x00000000,                             /* IRQ29                              */ 
-    0x00000000,                             /* IRQ30                              */ 
-    0x00000000                              /* IRQ31                              */ 
+		_INITIAL_SP,                            /* Stack address                      */
+		RESET_HANDLER,           		    /* Reset handler is C initialization. */
+		NMI_Handler,                            /* The NMI handler                    */
+		HardFault_Handler,                      /* The hard fault handler             */
+		(intfunc) OTA_VALID_APP_TAG,            /* OTA Application                    */
+		(intfunc) BLUE_FLAG_TAG,                /* Reserved for blue flag DTM updater */
+		0x00000000,                             /* Reserved                           */
+		0x00000000,                             /* Reserved                           */
+		0x00000000,                             /* Reserved                           */
+		0x00000000,                             /* Reserved                           */
+		0x00000000,                             /* Reserved                           */
+		SVC_Handler,                            /* SVCall                             */
+		0x00000000,                             /* Reserved                           */
+		0x00000000,                             /* Reserved                           */
+		PendSV_Handler,                         /* PendSV                             */
+		SysTick_Handler,                        /* SysTick_Handler                    */
+		GPIO_Handler,                           /* IRQ0:  GPIO                        */
+		NVM_Handler,                            /* IRQ1:  NVM                         */
+		0x00000000,                             /* IRQ2:                              */
+		0x00000000,                             /* IRQ3:                              */
+		UART_Handler,                           /* IRQ4:  UART                        */
+		SPI_Handler,                            /* IRQ5:  SPI                         */
+		Blue_Handler,                           /* IRQ6:  Blue                        */
+		WDG_Handler,                            /* IRQ7:  Watchdog                    */
+		0x00000000,                             /* IRQ8:                              */
+		0x00000000,                             /* IRQ9:                              */
+		0x00000000,                             /* IRQ10:                             */
+		0x00000000,                             /* IRQ11:                             */
+		0x00000000,                             /* IRQ12:                             */
+		ADC_Handler,                            /* IRQ13  ADC                         */
+		I2C2_Handler,                           /* IRQ14  I2C2                        */
+		I2C1_Handler,                           /* IRQ15  I2C1                        */
+		0x00000000,                             /* IRQ16                              */
+		MFT1A_Handler,                          /* IRQ17  MFT1 irq1                   */
+		MFT1B_Handler,                          /* IRQ18  MFT1 irq2                   */
+		MFT2A_Handler,                          /* IRQ19  MFT2 irq1                   */
+		MFT2B_Handler,                          /* IRQ20  MFT2 irq2                   */
+		RTC_Handler,                            /* IRQ21  RTC                         */
+		PKA_Handler,                            /* IRQ22  PKA                         */
+		DMA_Handler,                            /* IRQ23  DMA                         */
+		0x00000000,                             /* IRQ24                              */
+		0x00000000,                             /* IRQ25                              */
+		0x00000000,                             /* IRQ26                              */
+		0x00000000,                             /* IRQ27                              */
+		0x00000000,                             /* IRQ28                              */
+		0x00000000,                             /* IRQ29                              */
+		0x00000000,                             /* IRQ30                              */
+		0x00000000                              /* IRQ31                              */
 };
 
-	
+
 
 //------------------------------------------------------------------------------
 //   uint32_t *app_base
@@ -438,17 +438,17 @@ REQUIRED(static uint8_t __blue_RAM[8*64+12]) = {0,};
  * @brief Cold start configuration register table
  */
 #define COLD_START_CONFIGURATION                                      \
-{                                                                     \
-  NUMBER_CONFIG_BYTE, ATB0_ANA_ENG_REG,   USER_MODE_ATB0,             \
-  NUMBER_CONFIG_BYTE, ATB1_ANA_ENG_REG,   USER_MODE_ATB1,             \
-  NUMBER_CONFIG_BYTE, RM1_DIG_ENG_REG,    SMPS_10uH_RM1,              \
-  NUMBER_CONFIG_BYTE, CLOCK_LOW_ENG_REG,  SMPS_ON,                    \
-  NUMBER_CONFIG_BYTE, CLOCK_HIGH_ENG_REG, HIGH_FREQ_16M,              \
-  NUMBER_CONFIG_BYTE, PMU_ANA_ENG_REG,    SMPS_10uH_PMU,              \
-  NUMBER_CONFIG_BYTE, CLOCK_ANA_USER_REG, LOW_FREQ_XO,                \
-  NUMBER_CONFIG_BYTE, PMU_ANA_USER_REG,   PMU_ANA_USER_RESET_VALUE,   \
-  END_CONFIG                                                          \
-}
+		{                                                                     \
+	NUMBER_CONFIG_BYTE, ATB0_ANA_ENG_REG,   USER_MODE_ATB0,             \
+	NUMBER_CONFIG_BYTE, ATB1_ANA_ENG_REG,   USER_MODE_ATB1,             \
+	NUMBER_CONFIG_BYTE, RM1_DIG_ENG_REG,    SMPS_10uH_RM1,              \
+	NUMBER_CONFIG_BYTE, CLOCK_LOW_ENG_REG,  SMPS_ON,                    \
+	NUMBER_CONFIG_BYTE, CLOCK_HIGH_ENG_REG, HIGH_FREQ_16M,              \
+	NUMBER_CONFIG_BYTE, PMU_ANA_ENG_REG,    SMPS_10uH_PMU,              \
+	NUMBER_CONFIG_BYTE, CLOCK_ANA_USER_REG, LOW_FREQ_XO,                \
+	NUMBER_CONFIG_BYTE, PMU_ANA_USER_REG,   PMU_ANA_USER_RESET_VALUE,   \
+	END_CONFIG                                                          \
+		}
 
 /**
  * @brief RCO32K trimming value flash location
@@ -466,135 +466,135 @@ REQUIRED(static uint8_t __blue_RAM[8*64+12]) = {0,};
 
 void DeviceConfiguration(BOOL coldStart, BOOL waitLS_Ready)
 {
-  uint32_t current_time;
-  uint32_t Trimm_config; 
-  volatile uint8_t cold_start_config[] = COLD_START_CONFIGURATION;
+	uint32_t current_time;
+	uint32_t Trimm_config;
+	volatile uint8_t cold_start_config[] = COLD_START_CONFIGURATION;
 
-  if (coldStart) {    
-    /* High Speed Crystal Configuration */
+	if (coldStart) {
+		/* High Speed Crystal Configuration */
 #if (HS_SPEED_XTAL == HS_SPEED_XTAL_32MHZ)
-    cold_start_config[14] = HIGH_FREQ_32M;
-    /* Set 32MHz_SEL bit in the System controller register */
-    SYSTEM_CTRL->CTRL_b.MHZ32_SEL = 1;
+		cold_start_config[14] = HIGH_FREQ_32M;
+		/* Set 32MHz_SEL bit in the System controller register */
+		SYSTEM_CTRL->CTRL_b.MHZ32_SEL = 1;
 #elif (HS_SPEED_XTAL == HS_SPEED_XTAL_16MHZ)
-    cold_start_config[14] = HIGH_FREQ_16M;
+		cold_start_config[14] = HIGH_FREQ_16M;
 #else
 #error "No definition for High Speed Crystal"
 #endif
-  
-    /* Low Speed Crystal Source */
+
+		/* Low Speed Crystal Source */
 #if (LS_SOURCE == LS_SOURCE_EXTERNAL_32KHZ)
-    cold_start_config[20] = LOW_FREQ_XO;
+		cold_start_config[20] = LOW_FREQ_XO;
 #elif (LS_SOURCE == LS_SOURCE_INTERNAL_RO)
-    cold_start_config[20] = LOW_FREQ_RO;
+		cold_start_config[20] = LOW_FREQ_RO;
 #else
 #error "No definition for Low Speed Crystal Source"
 #endif
-  
-    /* SMPS configuration */
+
+		/* SMPS configuration */
 #if (SMPS_INDUCTOR == SMPS_INDUCTOR_10uH)
-    cold_start_config[11] = SMPS_ON;
-    cold_start_config[8] = SMPS_10uH_RM1;
-    cold_start_config[17] = SMPS_10uH_PMU;
+		cold_start_config[11] = SMPS_ON;
+		cold_start_config[8] = SMPS_10uH_RM1;
+		cold_start_config[17] = SMPS_10uH_PMU;
 #elif (SMPS_INDUCTOR == SMPS_INDUCTOR_4_7uH)
-    cold_start_config[11] = SMPS_ON;
-    cold_start_config[8] = SMPS_4_7uH_RM1;
-    cold_start_config[17] = SMPS_4_7uH_PMU;
+		cold_start_config[11] = SMPS_ON;
+		cold_start_config[8] = SMPS_4_7uH_RM1;
+		cold_start_config[17] = SMPS_4_7uH_PMU;
 #elif (SMPS_INDUCTOR == SMPS_INDUCTOR_NONE)
-    cold_start_config[11] = SMPS_OFF;
+		cold_start_config[11] = SMPS_OFF;
 #else
 #error "No definition for SMPS Configuration"
 #endif
 
-    /* BOR configuration. Note: this setup shall be executed after the SMPS configuration*/
+		/* BOR configuration. Note: this setup shall be executed after the SMPS configuration*/
 #if (BOR_CONFIG == BOR_ON)
-    /* Clear the 3 bit of the CLOCK_LOW_ENG_REG register */
-    cold_start_config[11] &= ~(1<<2);
+		/* Clear the 3 bit of the CLOCK_LOW_ENG_REG register */
+		cold_start_config[11] &= ~(1<<2);
 #elif (BOR_CONFIG == BOR_OFF)
-    /* Nothing to do because the BOR is disabled by default */
+		/* Nothing to do because the BOR is disabled by default */
 #else
 #error "No definition for BOR Configuration"
 #endif
 
-    /* Setup RCO32K trimming value in PMU_ANA_USER_REG  */
-    Trimm_config = *(volatile uint32_t*)RCO32K_TRIMMING_FLASH_ADDR;
-    if ((Trimm_config >> 16) == CHECK_BYTES)
-      cold_start_config[23] = ((Trimm_config&0x7)<<4)|PMU_ANA_USER_RESET_VALUE;
- 
-    /* Setup LDO1V2 trimming value in ATB1_ANA_ENG_REG  */
-    Trimm_config = *(volatile uint32_t*)LDO1V2_TRIMMING_FLASH_ADDR;
-    if ((Trimm_config >> 16) == CHECK_BYTES) {
-      cold_start_config[5] &= ~0x30;                 // Clear the register content of bit 4 and 5
-      cold_start_config[5] |= (Trimm_config&0x3)<<4; // Store the LDO1V2 trimming value in bit 4 and 5
-    }
-    
-    /* Cold start configuration device */
-    BLUE_CTRL->RADIO_CONFIG = 0x10000U | (uint16_t)((uint32_t)cold_start_config & 0x0000FFFFU);
-    while ((BLUE_CTRL->RADIO_CONFIG & 0x10000) != 0);
-  }
-  
-  /* Wait until HS is ready. The slow clock period 
-  * measurement is done automatically each time the
-  * device enters in active2 state and the HS is ready.
-  * The interrupt signals that a measurement is done.
-  */
-  while(CKGEN_BLE->CLK32K_IT == 0);
-  CKGEN_BLE->CLK32K_IT = 1;
-  CKGEN_BLE->CLK32K_COUNT = 23; //Restore the window length for slow clock measurement.
-  CKGEN_BLE->CLK32K_PERIOD = 0;
-  
-  
-  /* Wait until the RO or 32KHz is ready */
-  if (waitLS_Ready) {
-    current_time = *(volatile uint32_t *)0x48000010;
-    while(((*(volatile uint32_t *)0x48000010)&0x10) == (current_time&0x10));
-  }
+		/* Setup RCO32K trimming value in PMU_ANA_USER_REG  */
+		Trimm_config = *(volatile uint32_t*)RCO32K_TRIMMING_FLASH_ADDR;
+		if ((Trimm_config >> 16) == CHECK_BYTES)
+			cold_start_config[23] = ((Trimm_config&0x7)<<4)|PMU_ANA_USER_RESET_VALUE;
 
-  if (coldStart) {
+		/* Setup LDO1V2 trimming value in ATB1_ANA_ENG_REG  */
+		Trimm_config = *(volatile uint32_t*)LDO1V2_TRIMMING_FLASH_ADDR;
+		if ((Trimm_config >> 16) == CHECK_BYTES) {
+			cold_start_config[5] &= ~0x30;                 // Clear the register content of bit 4 and 5
+			cold_start_config[5] |= (Trimm_config&0x3)<<4; // Store the LDO1V2 trimming value in bit 4 and 5
+		}
+
+		/* Cold start configuration device */
+		BLUE_CTRL->RADIO_CONFIG = 0x10000U | (uint16_t)((uint32_t)cold_start_config & 0x0000FFFFU);
+		while ((BLUE_CTRL->RADIO_CONFIG & 0x10000) != 0);
+	}
+
+	/* Wait until HS is ready. The slow clock period
+	 * measurement is done automatically each time the
+	 * device enters in active2 state and the HS is ready.
+	 * The interrupt signals that a measurement is done.
+	 */
+	while(CKGEN_BLE->CLK32K_IT == 0);
+	CKGEN_BLE->CLK32K_IT = 1;
+	CKGEN_BLE->CLK32K_COUNT = 23; //Restore the window length for slow clock measurement.
+	CKGEN_BLE->CLK32K_PERIOD = 0;
+
+
+	/* Wait until the RO or 32KHz is ready */
+	if (waitLS_Ready) {
+		current_time = *(volatile uint32_t *)0x48000010;
+		while(((*(volatile uint32_t *)0x48000010)&0x10) == (current_time&0x10));
+	}
+
+	if (coldStart) {
 #if (HS_SPEED_XTAL == HS_SPEED_XTAL_32MHZ)
-    /* AHB up converter command register write*/
-    AHBUPCONV->COMMAND = 0x15;
+		/* AHB up converter command register write*/
+		AHBUPCONV->COMMAND = 0x15;
 #endif
-  }
-  
+	}
+
 }
 
 void SystemInit(void)
 {
-  /* Remap the vector table */
-  FLASH->CONFIG = FLASH_PREMAP_MAIN;
+	/* Remap the vector table */
+	FLASH->CONFIG = FLASH_PREMAP_MAIN;
 
-  /* Configure all the interrupts priority. 
-  * The application can modify the interrupts priority.
-  * The  PendSV_IRQn and BLUE_CTRL_IRQn SHALL maintain the highest priority */
+	/* Configure all the interrupts priority.
+	 * The application can modify the interrupts priority.
+	 * The  PendSV_IRQn and BLUE_CTRL_IRQn SHALL maintain the highest priority */
 
-  NVIC_SetPriority(PendSV_IRQn,    LOW_PRIORITY);
-  NVIC_SetPriority(SysTick_IRQn,   LOW_PRIORITY);
-  NVIC_SetPriority(GPIO_IRQn,      LOW_PRIORITY);
-  NVIC_SetPriority(NVM_IRQn,       LOW_PRIORITY);
-  NVIC_SetPriority(UART_IRQn,      LOW_PRIORITY);
-  NVIC_SetPriority(SPI_IRQn,       LOW_PRIORITY);
-  NVIC_SetPriority(BLUE_CTRL_IRQn, CRITICAL_PRIORITY);
-  NVIC_SetPriority(WDG_IRQn,       LOW_PRIORITY);
-  NVIC_SetPriority(ADC_IRQn,       LOW_PRIORITY);
-  NVIC_SetPriority(I2C2_IRQn,      LOW_PRIORITY);
-  NVIC_SetPriority(I2C1_IRQn,      LOW_PRIORITY);
-  NVIC_SetPriority(MFT1A_IRQn,    LOW_PRIORITY);
-  NVIC_SetPriority(MFT1B_IRQn,    LOW_PRIORITY);
-  NVIC_SetPriority(MFT2A_IRQn,    LOW_PRIORITY);
-  NVIC_SetPriority(MFT2B_IRQn,    LOW_PRIORITY);
-  NVIC_SetPriority(RTC_IRQn,       LOW_PRIORITY);
-  NVIC_SetPriority(PKA_IRQn,       LOW_PRIORITY);
-  NVIC_SetPriority(DMA_IRQn,       LOW_PRIORITY);
+	NVIC_SetPriority(PendSV_IRQn,    LOW_PRIORITY);
+	NVIC_SetPriority(SysTick_IRQn,   LOW_PRIORITY);
+	NVIC_SetPriority(GPIO_IRQn,      LOW_PRIORITY);
+	NVIC_SetPriority(NVM_IRQn,       LOW_PRIORITY);
+	NVIC_SetPriority(UART_IRQn,      LOW_PRIORITY);
+	NVIC_SetPriority(SPI_IRQn,       LOW_PRIORITY);
+	NVIC_SetPriority(BLUE_CTRL_IRQn, CRITICAL_PRIORITY);
+	NVIC_SetPriority(WDG_IRQn,       LOW_PRIORITY);
+	NVIC_SetPriority(ADC_IRQn,       LOW_PRIORITY);
+	NVIC_SetPriority(I2C2_IRQn,      LOW_PRIORITY);
+	NVIC_SetPriority(I2C1_IRQn,      LOW_PRIORITY);
+	NVIC_SetPriority(MFT1A_IRQn,    LOW_PRIORITY);
+	NVIC_SetPriority(MFT1B_IRQn,    LOW_PRIORITY);
+	NVIC_SetPriority(MFT2A_IRQn,    LOW_PRIORITY);
+	NVIC_SetPriority(MFT2B_IRQn,    LOW_PRIORITY);
+	NVIC_SetPriority(RTC_IRQn,       LOW_PRIORITY);
+	NVIC_SetPriority(PKA_IRQn,       LOW_PRIORITY);
+	NVIC_SetPriority(DMA_IRQn,       LOW_PRIORITY);
 
-  /* Device Configuration */
-  DeviceConfiguration(TRUE, TRUE);
-  /* Disable all the peripherals clock except NVM, SYSCTR, PKA and RNG */
-  CKGEN_SOC->CLOCK_EN = 0xE0066;
-  /* Disable all the peripherals clock except NVM, SYSCTR*/
-  //CKGEN_SOC->CLOCK_EN = 0x00006;
-  __enable_irq();
-  //__disable_irq();
+	/* Device Configuration */
+	DeviceConfiguration(TRUE, TRUE);
+	/* Disable all the peripherals clock except NVM, SYSCTR, PKA and RNG */
+	CKGEN_SOC->CLOCK_EN = 0xE0066;
+	/* Disable all the peripherals clock except NVM, SYSCTR*/
+	//CKGEN_SOC->CLOCK_EN = 0x00006;
+	__enable_irq();
+	//__disable_irq();
 }
 
 

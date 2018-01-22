@@ -24,5 +24,57 @@ void mbed_sdk_init()
 	    SetSysClock();
 	    SystemCoreClockUpdate();
 #endif
-
 }
+
+#include "cmsis.h"
+#include "BlueNRG1_uart.h"
+
+void blue_printf(char *str){
+	uint8_t i=0;
+	while (str[i]!='\0'){
+		/* Wait if TX fifo is full. */
+		while (UART_GetFlagStatus(UART_FLAG_TXFF) == SET);
+		/* send the data */
+		UART_SendData((uint16_t)str[i]);
+		i++;
+	}
+}
+
+/**********************************************
+ *                OVERRIDES
+ **********************************************/
+
+// OVERRIDE PRINTF
+int printf(char *str){
+	blue_printf(str);
+	return 0;
+}
+// END OVERRIDE PRINTF
+
+
+// OVERRIDE VFPRINTF
+#include "reent.h"
+#include "stdarg.h"
+#if !defined(__FILE_defined)
+typedef __FILE FILE;
+# define __FILE_defined
+#endif
+#ifndef __VALIST
+#ifdef __GNUC__
+#define __VALIST __gnuc_va_list
+#else
+#define __VALIST char*
+#endif
+#endif
+int vfprintf(FILE * _file, char *format, __VALIST a){
+	blue_printf(format);
+	return 0;
+}
+// END OVERRIDE VFPRINTF
+
+// OVERRIDE VSPRINTF
+int vsprintf(char *a, char *str, __VALIST b){
+	blue_printf(str);
+	return 0;
+}
+// END OVERRIDE VSPRINTF

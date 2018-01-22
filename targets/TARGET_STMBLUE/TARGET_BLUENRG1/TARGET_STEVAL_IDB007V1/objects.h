@@ -19,10 +19,11 @@ extern "C" {
 struct serial_s{
     UARTName uart;
     int index; // Used by irq
-    UART_InitType init;
+    UART_InitType *init;
     PinName pin_tx;
     PinName pin_rx;
 };
+
 
 
 #ifdef stm

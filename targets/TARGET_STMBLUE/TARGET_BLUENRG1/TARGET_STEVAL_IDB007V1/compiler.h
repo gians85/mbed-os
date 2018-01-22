@@ -12,6 +12,8 @@
 * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 *******************************************************************************/
+#ifdef ccc
+
 #ifndef __COMPILER_H__
 #define __COMPILER_H__
 
@@ -333,3 +335,5 @@ extern unsigned int Image$$ARM_LIB_STACKHEAP$$ZI$$Limit;
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 #endif /* __COMPILER_H__ */
+
+#endif /* ccc */
